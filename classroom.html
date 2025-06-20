@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ห้องเรียนของฉัน - ระบบติดตามความสนใจของนักเรียน</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#2563eb", secondary: "#60a5fa" },
+            borderRadius: {
+              none: "0px", sm: "4px", DEFAULT: "8px", md: "12px",
+              lg: "16px", xl: "20px", "2xl": "24px", "3xl": "32px",
+              full: "9999px", button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Prompt:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      body {
+        font-family: 'Prompt', sans-serif;
+        background-color: #f8fafc;
+      }
+      .font-pacifico {
+        font-family: 'Pacifico', cursive;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #e5e7eb;
+        transition: .4s;
+        border-radius: 34px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #2563eb;
+      }
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+      <!-- Navigation -->
+      <nav class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex items-center">
+              <div class="text-primary text-2xl font-pacifico">logo</div>
+              <div class="hidden md:ml-10 md:flex md:space-x-8">
+                <a href="index.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">หน้าหลัก</a>
+                <a href="classrooms.html" class="text-primary border-b-2 border-primary px-1 pt-1 font-medium">ห้องเรียนของฉัน</a>
+                <a href="#" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">บันทึกการสอน</a>
+                <a href="#" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">รายงาน</a>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="flex-shrink-0 relative">
+                <button type="button" class="flex items-center gap-2 text-sm focus:outline-none">
+                  <span class="hidden md:block">อาจารย์ สมชาย วิทยาดี</span>
+                  <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                    <i class="ri-user-line text-gray-600"></i>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <!-- Page Header -->
+          <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <!-- ***** ELEMENT ADDED HERE ***** -->
+            <div class="flex items-center gap-4">
+                <a href="index.html" title="กลับไปหน้าหลัก" class="p-2 text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full transition-colors">
+                    <i class="ri-arrow-left-s-line text-2xl"></i>
+                </a>
+                <h1 class="text-3xl font-bold text-gray-800">ห้องเรียนของฉัน</h1>
+            </div>
+            <button id="createClassBtn" class="gradient-bg text-white px-6 py-3 rounded-button font-medium shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 whitespace-nowrap mt-4 md:mt-0">
+              <i class="ri-add-line"></i>
+              สร้างห้องเรียนใหม่
+            </button>
+          </div>
+
+          <!-- Filters and Search -->
+          <div class="mb-8 p-4 bg-white rounded-lg shadow-sm flex flex-col md:flex-row gap-4 items-center">
+            <div class="relative w-full md:w-1/3">
+                <input type="text" placeholder="ค้นหาชื่อวิชา หรือ รหัสวิชา..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            </div>
+            <div class="flex-grow flex items-center gap-4">
+                <label class="text-gray-600 font-medium">สถานะ:</label>
+                <div class="flex gap-2 flex-wrap">
+                    <button class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-full shadow-sm">ทั้งหมด</button>
+                    <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full">กำลังสอน</button>
+                    <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full">ยังไม่เริ่ม</button>
+                    <button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full">สิ้นสุดแล้ว</button>
+                </div>
+            </div>
+          </div>
+
+          <!-- Class Cards Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border-t-4 border-green-500">
+                <div class="p-6">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-800">การเขียนโปรแกรมเชิงวัตถุ</h3>
+                      <p class="text-gray-500 text-sm">รหัสวิชา: CS401</p>
+                    </div>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">กำลังสอน</span>
+                  </div>
+                  <div class="flex items-center gap-2 mb-2"><i class="ri-user-line text-gray-500"></i><span class="text-sm text-gray-600">28 / 30 คน</span></div>
+                  <div class="flex items-center gap-2 mb-4"><i class="ri-time-line text-gray-500"></i><span class="text-sm text-gray-600">เริ่ม 09:30 น. (วันนี้)</span></div>
+                  <div class="flex justify-between">
+                    <a href="live-class.html" class="bg-primary text-white px-4 py-2 rounded-button font-medium hover:bg-primary/90 transition whitespace-nowrap inline-block no-underline">เข้าห้องเรียน</a>
+                    <button class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 flex items-center gap-1 whitespace-nowrap"><i class="ri-settings-3-line"></i></button>
+                  </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border-t-4 border-blue-500">
+                <div class="p-6">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-800">การวิเคราะห์และออกแบบระบบ</h3>
+                      <p class="text-gray-500 text-sm">รหัสวิชา: CS305</p>
+                    </div>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">ยังไม่เริ่ม</span>
+                  </div>
+                   <div class="flex items-center gap-2 mb-2"><i class="ri-user-line text-gray-500"></i><span class="text-sm text-gray-600">32 คน</span></div>
+                  <div class="flex items-center gap-2 mb-4"><i class="ri-time-line text-gray-500"></i><span class="text-sm text-gray-600">เริ่ม 13:00 น. (วันนี้)</span></div>
+                  <div class="flex justify-between">
+                    <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-button font-medium hover:bg-gray-200 transition whitespace-nowrap">เตรียมห้องเรียน</button>
+                    <button class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 flex items-center gap-1 whitespace-nowrap"><i class="ri-settings-3-line"></i></button>
+                  </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border-t-4 border-blue-500">
+                <div class="p-6">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-800">ปัญญาประดิษฐ์เบื้องต้น</h3>
+                      <p class="text-gray-500 text-sm">รหัสวิชา: CS422</p>
+                    </div>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">ยังไม่เริ่ม</span>
+                  </div>
+                   <div class="flex items-center gap-2 mb-2"><i class="ri-user-line text-gray-500"></i><span class="text-sm text-gray-600">24 คน</span></div>
+                  <div class="flex items-center gap-2 mb-4"><i class="ri-time-line text-gray-500"></i><span class="text-sm text-gray-600">เริ่ม 15:30 น. (วันนี้)</span></div>
+                  <div class="flex justify-between">
+                     <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-button font-medium hover:bg-gray-200 transition whitespace-nowrap">เตรียมห้องเรียน</button>
+                     <button class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 flex items-center gap-1 whitespace-nowrap"><i class="ri-settings-3-line"></i></button>
+                  </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border-t-4 border-gray-400 opacity-75">
+                <div class="p-6">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-800">โครงสร้างข้อมูลและอัลกอริทึม</h3>
+                      <p class="text-gray-500 text-sm">รหัสวิชา: CS212</p>
+                    </div>
+                    <span class="px-3 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">สิ้นสุดแล้ว</span>
+                  </div>
+                   <div class="flex items-center gap-2 mb-2"><i class="ri-user-line text-gray-500"></i><span class="text-sm text-gray-600">35 คน</span></div>
+                  <div class="flex items-center gap-2 mb-4"><i class="ri-calendar-check-line text-gray-500"></i><span class="text-sm text-gray-600">18 มิ.ย. 2025</span></div>
+                  <div class="flex justify-between">
+                     <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-button font-medium hover:bg-gray-200 transition whitespace-nowrap">ดูรายงาน</button>
+                     <button class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 flex items-center gap-1 whitespace-nowrap"><i class="ri-history-line"></i></button>
+                  </div>
+                </div>
+            </div>
+          </div>
+          
+           <div class="mt-8 flex justify-center items-center">
+            <nav class="flex items-center space-x-2" aria-label="Pagination">
+              <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <i class="ri-arrow-left-s-line"></i>
+              </a>
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-primary text-white text-sm font-medium rounded-md">1</a>
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">2</a>
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-md">3</a>
+              <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <i class="ri-arrow-right-s-line"></i>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </main>
+
+      <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-gray-500 text-sm">
+          <p>© 2025 ระบบติดตามความสนใจของนักเรียน. สงวนลิขสิทธิ์ทั้งหมด.</p>
+        </div>
+      </footer>
+    </div>
+
+    <div id="createClassModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg max-w-md w-full p-6 shadow-xl m-4">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">สร้างห้องเรียนใหม่</h3>
+          <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+            <div class="w-6 h-6 flex items-center justify-center"><i class="ri-close-line"></i></div>
+          </button>
+        </div>
+        <form>
+          <div class="mb-4">
+            <label for="className" class="block text-sm font-medium text-gray-700 mb-1">ชื่อวิชา</label>
+            <input type="text" id="className" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" placeholder="เช่น การเขียนโปรแกรมเชิงวัตถุ"/>
+          </div>
+          <div class="mb-4">
+            <label for="classCode" class="block text-sm font-medium text-gray-700 mb-1">รหัสวิชา</label>
+            <input type="text" id="classCode" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" placeholder="เช่น CS401"/>
+          </div>
+          <div class="mb-4">
+            <label for="classTime" class="block text-sm font-medium text-gray-700 mb-1">เวลาเรียน</label>
+            <input type="time" id="classTime" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"/>
+          </div>
+          <div class="mb-4">
+            <label for="classDate" class="block text-sm font-medium text-gray-700 mb-1">วันที่เรียน</label>
+            <input type="date" id="classDate" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"/>
+          </div>
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">ตั้งค่าการแจ้งเตือน</label>
+            <div class="flex items-center justify-between bg-gray-50 px-4 py-3 rounded-md">
+              <span class="text-sm text-gray-700">แจ้งเตือนเมื่อนักเรียนไม่ตั้งใจเรียน</span>
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button type="button" id="cancelCreate" class="mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-button hover:bg-gray-50 focus:outline-none whitespace-nowrap">ยกเลิก</button>
+            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-button hover:bg-primary/90 focus:outline-none whitespace-nowrap">สร้างห้องเรียน</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script id="modalScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const createClassBtn = document.getElementById("createClassBtn");
+        const createClassModal = document.getElementById("createClassModal");
+        const closeModalBtn = document.getElementById("closeModal");
+        const cancelCreateBtn = document.getElementById("cancelCreate");
+        
+        if (createClassBtn && createClassModal && closeModalBtn && cancelCreateBtn) {
+          const openModal = () => createClassModal.classList.remove("hidden");
+          const closeModal = () => createClassModal.classList.add("hidden");
+
+          createClassBtn.addEventListener("click", openModal);
+          closeModalBtn.addEventListener("click", closeModal);
+          cancelCreateBtn.addEventListener("click", closeModal);
+          
+          createClassModal.addEventListener("click", function (e) {
+            if (e.target === createClassModal) {
+              closeModal();
+            }
+          });
+        }
+      });
+    </script>
+</body>
+</html>

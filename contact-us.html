@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ติดต่อเรา - ระบบติดตามความสนใจของนักเรียน</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#2563eb", secondary: "#60a5fa" },
+             borderRadius: { button: "8px" },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
+    <style>
+      body { font-family: 'Prompt', sans-serif; background-color: #f3f4f6; }
+       .gradient-bg {
+        background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+      }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-4xl mx-auto">
+         <div class="mb-8">
+            <a href="index.html" class="inline-flex items-center gap-2 text-gray-600 hover:text-primary font-medium">
+                <i class="ri-arrow-left-s-line"></i>
+                กลับไปหน้าเข้าสู่ระบบ
+            </a>
+        </div>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
+            <div class="md:w-2/3 p-8">
+                 <h1 class="text-3xl font-bold text-gray-800 mb-6">ส่งข้อความถึงเรา</h1>
+                 <form action="#" method="POST">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                            <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">อีเมล</label>
+                            <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary">
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                         <label for="message" class="block text-sm font-medium text-gray-700 mb-1">ข้อความ</label>
+                         <textarea id="message" rows="5" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"></textarea>
+                    </div>
+                    <button type="submit" class="w-full gradient-bg text-white py-2 rounded-button font-medium hover:shadow-md transition">ส่งข้อความ</button>
+                 </form>
+            </div>
+            <div class="md:w-1/3 gradient-bg text-white p-8">
+                 <h2 class="text-2xl font-bold mb-6">ข้อมูลติดต่อ</h2>
+                 <div class="space-y-4">
+                     <div class="flex items-start gap-3">
+                        <i class="ri-map-pin-line mt-1"></i>
+                        <span>123 ถ.สุขุมวิท, แสนสุข, ชลบุรี 20131, ประเทศไทย</span>
+                     </div>
+                      <div class="flex items-start gap-3">
+                        <i class="ri-phone-line mt-1"></i>
+                        <span>(038) 123-4567</span>
+                     </div>
+                      <div class="flex items-start gap-3">
+                        <i class="ri-mail-line mt-1"></i>
+                        <span>contact@studentinterest.ac.th</span>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

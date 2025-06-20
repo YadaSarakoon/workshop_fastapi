@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ระบบติดตามความสนใจของนักเรียนในชั้นเรียนออนไลน์</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#2563eb", secondary: "#60a5fa" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Prompt:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      font-family: 'Prompt', sans-serif;
+      background-color: #f8fafc;
+      }
+      .gradient-bg {
+      background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      }
+      .custom-checkbox {
+      position: relative;
+      cursor: pointer;
+      }
+      .custom-checkbox input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      }
+      .checkmark {
+      position: relative;
+      height: 20px;
+      width: 20px;
+      background-color: #fff;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      }
+      .custom-checkbox input:checked ~ .checkmark {
+      background-color: #2563eb;
+      border-color: #2563eb;
+      }
+      .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      }
+      .custom-checkbox input:checked ~ .checkmark:after {
+      display: block;
+      }
+      .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      }
+      .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      }
+      .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e5e7eb;
+      transition: .4s;
+      border-radius: 34px;
+      }
+      .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+      }
+      input:checked + .slider {
+      background-color: #2563eb;
+      }
+      input:checked + .slider:before {
+      transform: translateX(26px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen flex flex-col">
+      <!-- Navigation -->
+      <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex items-center">
+              <div class="text-primary text-2xl font-['Pacifico']">logo</div>
+              <div class="hidden md:ml-10 md:flex md:space-x-8">
+                <a
+                  href="#"
+                  class="text-primary border-b-2 border-primary px-1 pt-1 font-medium"
+                  >หน้าหลัก</a
+                >
+                <a
+                  href="#"
+                  class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium"
+                  >ห้องเรียนของฉัน</a
+                >
+                <a
+                  href="#"
+                  class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium"
+                  >บันทึกการสอน</a
+                >
+                <a
+                  href="#"
+                  class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium"
+                  >รายงาน</a
+                >
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div class="flex-shrink-0 relative">
+                <button
+                  type="button"
+                  class="flex items-center gap-2 text-sm focus:outline-none"
+                >
+                  <span class="hidden md:block">อาจารย์ สมชาย วิทยาดี</span>
+                  <div
+                    class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
+                  >
+                    <i class="ri-user-line text-gray-600"></i>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- Main Content -->
+      <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <!-- Hero Section -->
+          <div class="mb-12 bg-white rounded-lg shadow-sm overflow-hidden">
+            <div
+              class="relative h-64 md:h-80 w-full"
+              style="background-image: url('https://readdy.ai/api/search-image?query=A%20modern%20classroom%20with%20students%20attending%20an%20online%20class%2C%20with%20a%20teacher%20monitoring%20their%20engagement%20levels%20through%20a%20digital%20interface.%20The%20image%20shows%20a%20clean%2C%20professional%20educational%20setting%20with%20soft%20lighting%20and%20a%20blue%20color%20scheme.%20The%20left%20side%20has%20a%20gradient%20blue%20background%20that%20smoothly%20transitions%20to%20the%20classroom%20scene%20on%20the%20right.&width=1280&height=400&seq=hero1&orientation=landscape'); background-size: cover; background-position: center;"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-primary/90 to-transparent"
+              >
+                <div
+                  class="h-full max-w-xl px-8 py-12 flex flex-col justify-center"
+                >
+                  <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                    ระบบติดตามความสนใจของนักเรียนในชั้นเรียนออนไลน์
+                  </h1>
+                  <p class="text-white/90 mb-6">
+                    เทคโนโลยีวิเคราะห์สีหน้าและพฤติกรรมแบบเรียลไทม์
+                    ช่วยให้การสอนออนไลน์มีประสิทธิภาพมากขึ้น
+                  </p>
+                  <button
+                    class="bg-white text-primary px-6 py-2 rounded-button font-medium shadow-sm hover:bg-gray-50 transition whitespace-nowrap w-fit"
+                  >
+                    เริ่มต้นใช้งาน
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Create Class Button -->
+          <div class="mb-8 text-center">
+            <button
+              class="gradient-bg text-white px-6 py-3 rounded-button font-medium shadow-md hover:shadow-lg transition flex items-center justify-center mx-auto gap-2 whitespace-nowrap"
+            >
+              <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-add-line"></i>
+              </div>
+              สร้างห้องเรียนใหม่
+            </button>
+          </div>
+          <!-- Class Cards -->
+          <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">
+              ห้องเรียนของฉัน
+            </h2>
+            <div id="classroom-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- Active Class Card -->
+              <div
+                class="bg-white rounded-lg shadow-sm overflow-hidden border border-green-200"
+              >
+                <div class="p-6">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-800">
+                        การเขียนโปรแกรมเชิงวัตถุ
+                      </h3>
+                      <p class="text-gray-500 text-sm">รหัสวิชา: CS401</p>
+                    </div>
+                    <span
+                      class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full"
+                      >กำลังสอน</span
+                    >
+                  </div>
+                  <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-user-line text-gray-500"></i>
+                      </div>
+                      <span class="text-sm text-gray-600">28 คน</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-time-line text-gray-500"></i>
+                      </div>
+                      <span class="text-sm text-gray-600">เริ่ม 09:30 น.</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between">
+                    <a
+                      href="https://readdy.ai/home/397349f6-0f3c-4ea8-9c1f-15203f7d63c4/85ea5543-f1b3-4408-821f-8c5cb67a14e0"
+                      data-readdy="true"
+                      class="bg-primary text-white px-4 py-2 rounded-button font-medium hover:bg-primary/90 transition whitespace-nowrap inline-block no-underline"
+                      >เข้าห้องเรียน</a
+                    >
+                    <button
+                      class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <div class="w-4 h-4 flex items-center justify-center">
+                        <i class="ri-more-2-fill"></i>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Upcoming Class Card -->
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="p-6">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-800">
+                        การวิเคราะห์และออกแบบระบบ
+                      </h3>
+                      <p class="text-gray-500 text-sm">รหัสวิชา: CS305</p>
+                    </div>
+                    <span
+                      class="px-3 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full"
+                      >ยังไม่เริ่ม</span
+                    >
+                  </div>
+                  <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-user-line text-gray-500"></i>
+                      </div>
+                      <span class="text-sm text-gray-600">32 คน</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-time-line text-gray-500"></i>
+                      </div>
+                      <span class="text-sm text-gray-600">เริ่ม 13:00 น.</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between">
+                    <button
+                      class="bg-gray-100 text-gray-700 px-4 py-2 rounded-button font-medium hover:bg-gray-200 transition whitespace-nowrap"
+                    >
+                      เตรียมห้องเรียน
+                    </button>
+                    <button
+                      class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <div class="w-4 h-4 flex items-center justify-center">
+                        <i class="ri-more-2-fill"></i>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Another Upcoming Class Card -->
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="p-6">
+                  <div class="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-800">
+                        ปัญญาประดิษฐ์เบื้องต้น
+                      </h3>
+                      <p class="text-gray-500 text-sm">รหัสวิชา: CS422</p>
+                    </div>
+                    <span
+                      class="px-3 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full"
+                      >ยังไม่เริ่ม</span
+                    >
+                  </div>
+                  <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-user-line text-gray-500"></i>
+                      </div>
+                      <span class="text-sm text-gray-600">24 คน</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-time-line text-gray-500"></i>
+                      </div>
+                      <span class="text-sm text-gray-600">เริ่ม 15:30 น.</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between">
+                    <button
+                      class="bg-gray-100 text-gray-700 px-4 py-2 rounded-button font-medium hover:bg-gray-200 transition whitespace-nowrap"
+                    >
+                      เตรียมห้องเรียน
+                    </button>
+                    <button
+                      class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <div class="w-4 h-4 flex items-center justify-center">
+                        <i class="ri-more-2-fill"></i>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Recent Recordings -->
+          <div>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">
+              บันทึกการสอนล่าสุด
+            </h2>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        วิชา
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        หัวข้อ
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        วันที่
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        ระยะเวลา
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        การรับชม
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        ตัวเลือก
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                      >
+                        CS401
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        การสืบทอดคุณสมบัติ (Inheritance)
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        18 มิ.ย. 2025
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        1:45:20
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        24 ครั้ง
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                      >
+                        <button class="text-primary hover:text-primary/80">
+                          ดู
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                      >
+                        CS305
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        แผนภาพ Use Case
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        17 มิ.ย. 2025
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        2:10:45
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        31 ครั้ง
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                      >
+                        <button class="text-primary hover:text-primary/80">
+                          ดู
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                      >
+                        CS422
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        การเรียนรู้ของเครื่อง (Machine Learning)
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        16 มิ.ย. 2025
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        1:55:10
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                      >
+                        19 ครั้ง
+                      </td>
+                      <td
+                        class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                      >
+                        <button class="text-primary hover:text-primary/80">
+                          ดู
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!-- Footer -->
+      <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+              <div class="text-primary text-xl font-['Pacifico']">logo</div>
+              <p class="text-gray-500 text-sm mt-1">
+                ระบบติดตามความสนใจของนักเรียนในชั้นเรียนออนไลน์
+              </p>
+            </div>
+            <div class="flex space-x-6">
+              <a href="#" class="text-gray-500 hover:text-gray-700">
+                <div class="w-5 h-5 flex items-center justify-center">
+                  <i class="ri-facebook-fill"></i>
+                </div>
+              </a>
+              <a href="#" class="text-gray-500 hover:text-gray-700">
+                <div class="w-5 h-5 flex items-center justify-center">
+                  <i class="ri-twitter-fill"></i>
+                </div>
+              </a>
+              <a href="#" class="text-gray-500 hover:text-gray-700">
+                <div class="w-5 h-5 flex items-center justify-center">
+                  <i class="ri-instagram-fill"></i>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div
+            class="mt-6 border-t border-gray-200 pt-6 flex flex-col md:flex-row justify-between"
+          >
+            <p class="text-gray-500 text-sm">
+              © 2025 ระบบติดตามความสนใจของนักเรียน. สงวนลิขสิทธิ์ทั้งหมด.
+            </p>
+            <div class="mt-4 md:mt-0 flex space-x-6">
+              <a href="#" class="text-gray-500 hover:text-gray-700 text-sm"
+                >นโยบายความเป็นส่วนตัว</a
+              >
+              <a href="#" class="text-gray-500 hover:text-gray-700 text-sm"
+                >เงื่อนไขการใช้งาน</a
+              >
+              <a href="#" class="text-gray-500 hover:text-gray-700 text-sm"
+                >ติดต่อเรา</a
+              >
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- Create Class Modal (Hidden by default) -->
+    <div
+      id="createClassModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-white rounded-lg max-w-md w-full p-6 shadow-xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">
+            สร้างห้องเรียนใหม่
+          </h3>
+          <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+            <div class="w-6 h-6 flex items-center justify-center">
+              <i class="ri-close-line"></i>
+            </div>
+          </button>
+        </div>
+        <form>
+          <div class="mb-4">
+            <label
+              for="className"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >ชื่อวิชา</label
+            >
+            <input
+              type="text"
+              id="className"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+              placeholder="เช่น การเขียนโปรแกรมเชิงวัตถุ"
+            />
+          </div>
+          <div class="mb-4">
+            <label
+              for="classCode"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >รหัสวิชา</label
+            >
+            <input
+              type="text"
+              id="classCode"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+              placeholder="เช่น CS401"
+            />
+          </div>
+          <div class="mb-4">
+            <label
+              for="classTime"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >เวลาเรียน</label
+            >
+            <input
+              type="time"
+              id="classTime"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+            />
+          </div>
+          <div class="mb-4">
+            <label
+              for="classDate"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >วันที่เรียน</label
+            >
+            <input
+              type="date"
+              id="classDate"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+            />
+          </div>
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >ตั้งค่าการแจ้งเตือน</label
+            >
+            <div
+              class="flex items-center justify-between bg-gray-50 px-4 py-3 rounded-md"
+            >
+              <span class="text-sm text-gray-700"
+                >แจ้งเตือนเมื่อนักเรียนไม่ตั้งใจเรียน</span
+              >
+              <label class="switch">
+                <input type="checkbox" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button
+              type="button"
+              id="cancelCreate"
+              class="mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-button hover:bg-gray-50 focus:outline-none whitespace-nowrap"
+            >
+              ยกเลิก
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-button hover:bg-primary/90 focus:outline-none whitespace-nowrap"
+            >
+              สร้างห้องเรียน
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script id="modalScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const createClassBtn = document.querySelector(".gradient-bg");
+        const createClassModal = document.getElementById("createClassModal");
+        const closeModalBtn = document.getElementById("closeModal");
+        const cancelCreateBtn = document.getElementById("cancelCreate");
+        function openModal() {
+          createClassModal.classList.remove("hidden");
+        }
+        function closeModal() {
+          createClassModal.classList.add("hidden");
+        }
+        createClassBtn.addEventListener("click", openModal);
+        closeModalBtn.addEventListener("click", closeModal);
+        cancelCreateBtn.addEventListener("click", closeModal);
+        // Close modal when clicking outside
+        createClassModal.addEventListener("click", function (e) {
+          if (e.target === createClassModal) {
+            closeModal();
+          }
+        });
+      });
+    </script>
+         <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            // ฟังก์ชันสำหรับเปลี่ยนหน้า
+            function navigateTo(url) {
+              window.location.href = url;
+            }
+    
+            // --- 1. เชื่อมโยงเมนูหลัก (Navigation Bar) ---
+    
+            // หาลิงก์ทั้งหมดในเมนู (ยกเว้นลิงก์ "หน้าหลัก" ที่มีสีน้ำเงินอยู่แล้ว)
+            const navLinks = document.querySelectorAll('nav a.text-gray-500');
+    
+            // ลิงก์ "ห้องเรียนของฉัน" (ตัวแรกในกลุ่มสีเทา)
+            if (navLinks[0]) {
+              navLinks[0].addEventListener('click', function (event) {
+                event.preventDefault(); // ป้องกันการทำงานของ href="#"
+                navigateTo('my-classrooms.html');
+              });
+            }
+    
+            // ลิงก์ "บันทึกการสอน" (ตัวที่สอง)
+            if (navLinks[1]) {
+              navLinks[1].addEventListener('click', function (event) {
+                event.preventDefault();
+                navigateTo('recordings.html');
+              });
+            }
+    
+            // ลิงก์ "รายงาน" (ตัวที่สาม)
+            if (navLinks[2]) {
+              navLinks[2].addEventListener('click', function (event) {
+                event.preventDefault();
+                navigateTo('reports.html');
+              });
+            }
+            
+            // ลิงก์ "เตรียมการสอน" (อาจารย์ สมชาย)
+            const profileButton = document.querySelector('.flex-shrink-0 button');
+            if(profileButton) {
+                profileButton.addEventListener('click', function() {
+                    navigateTo('profile.html');
+                });
+            }
+
+            // ลิงก์ "ดูวีดีโอการสอนย้อนหลัง" (อาจารย์ สมชาย)
+            const viewButton = document.querySelector('.flex-shrink-0 button');
+            if(viewButton) {
+                viewButton.addEventListener('click', function() {
+                    navigateTo('view-recording.html');
+                });
+            }
+
+            // ลิงก์ "โปรไฟล์" (อาจารย์ สมชาย)
+            const prepareButton = document.querySelector('.flex-shrink-0 button');
+            if(profileButton) {
+                prepareButton.addEventListener('click', function() {
+                    navigateTo('prepare-class.html');
+                });
+            }
+          
+            // ลิงก์ "สร้างห้องเรียน" (อาจารย์ สมชาย)
+            const createButton = document.querySelector('.flex-shrink-0 button');
+            if(createButton) {
+                createButton.addEventListener('click', function() {
+                    navigateTo('create-class.html');
+                });
+            }
+            
+    
+    
+            // --- 2. เชื่อมโยงปุ่ม "เตรียมห้องเรียน" (ที่เป็น <button>) ---
+    
+            // หาปุ่ม "เตรียมห้องเรียน" ทั้งหมด
+            const prepareButtons = document.querySelectorAll('button.bg-gray-100');
+            prepareButtons.forEach(function (button) {
+              // ถ้าเจอข้อความว่า "เตรียมห้องเรียน" ในปุ่ม
+              if (button.textContent.trim() === 'เตรียมห้องเรียน') {
+                button.addEventListener('click', function () {
+                  // สมมติว่าทุกปุ่ม "เตรียมห้องเรียน" ไปที่หน้าเดียวกัน
+                  navigateTo('prepare-class.html');
+                });
+              }
+            });
+    
+    
+            // --- 3. เชื่อมโยงปุ่ม "ดู" ในตาราง (ที่เป็น <button>) ---
+    
+            // หาปุ่ม "ดู" ทั้งหมดในตาราง
+            const viewButtons = document.querySelectorAll('tbody button.text-primary');
+            viewButtons.forEach(function (button) {
+              if (button.textContent.trim() === 'ดู') {
+                button.addEventListener('click', function () {
+                  // สมมติว่าทุกปุ่ม "ดู" ไปที่หน้ารายละเอียดการบันทึกเดียวกัน
+                  navigateTo('view-recording.html');
+                });
+              }
+            });
+            
+            // หมายเหตุ: ปุ่ม "เข้าห้องเรียน" ของคุณในโค้ดที่ส่งมาล่าสุด
+            // เป็น <a href="https://readdy.ai/..."> อยู่แล้ว จึงทำงานได้โดยไม่ต้องใช้ JavaScript
+    
+          });
+        </script>
+
+... (สคริปต์ navigation เดิมของคุณ) ...
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      // --- ส่วนควบคุม Modal ---
+      const openModalBtn2 = document.querySelector('.gradient-bg');   // ปุ่มในหน้า login
+      const createClassModal = document.getElementById("createClassModal");
+      const closeModalBtn = document.getElementById("closeModal");
+      const cancelCreateBtn = document.getElementById("cancelCreate");
+      const classroomForm = createClassModal.querySelector('form');
+
+      function openModal() {
+          if (createClassModal) createClassModal.classList.remove("hidden");
+      }
+      function closeModal() {
+          if (createClassModal) createClassModal.classList.add("hidden");
+      }
+
+      if (openModalBtn2) openModalBtn2.addEventListener("click", openModal);
+      if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
+      if (cancelCreateBtn) cancelCreateBtn.addEventListener("click", closeModal);
+      if(createClassModal) {
+          createClassModal.addEventListener("click", function (e) {
+              if (e.target === createClassModal) {
+                  closeModal();
+              }
+          });
+      }
+
+      // --- ส่วนจัดการข้อมูลห้องเรียน ---
+      function renderClassrooms() {
+          const classroomsListContainer = document.getElementById('classrooms-list');
+          if (!classroomsListContainer) return;
+
+          const classrooms = JSON.parse(localStorage.getItem('myClassrooms')) || [];
+          classroomsListContainer.innerHTML = '';
+          
+          if (classrooms.length === 0) {
+              // ถ้ายังไม่มีห้องเรียน ให้แสดงการ์ดตัวอย่างเดิม
+              classroomsListContainer.innerHTML = `
+                  <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-green-200">
+                     </div>
+                  <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                     </div>
+                  <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                     </div>
+              `;
+              return;
+          }
+
+          classrooms.forEach(classroom => {
+              const cardHTML = `
+                  <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                      <div class="p-6 flex flex-col h-full">
+                          <div class="flex justify-between items-start mb-4">
+                              <div>
+                                  <h3 class="text-lg font-semibold text-gray-800">${classroom.name}</h3>
+                                  <p class="text-gray-500 text-sm">รหัสวิชา: ${classroom.code}</p>
+                              </div>
+                              <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">ใหม่</span>
+                          </div>
+                          <div class="flex justify-between items-center mb-4">
+                              <div class="flex items-center gap-2"><i class="ri-user-line text-gray-500"></i><span class="text-sm text-gray-600">${classroom.students} คน</span></div>
+                              <div class="flex items-center gap-2"><i class="ri-time-line text-gray-500"></i><span class="text-sm text-gray-600">เริ่ม ${classroom.time}</span></div>
+                          </div>
+                          <div class="flex justify-between mt-auto">
+                              <a href="prepare-class.html" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-button font-medium hover:bg-gray-200 no-underline">เตรียมห้องเรียน</a>
+                              <a href="class-details.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 no-underline"><i class="ri-more-2-fill"></i></a>
+                          </div>
+                      </div>
+                  </div>
+              `;
+              classroomsListContainer.innerHTML += cardHTML;
+          });
+      }
+
+      // --- ส่วนจัดการการบันทึกฟอร์ม ---
+      if (classroomForm) {
+          classroomForm.addEventListener('submit', function(event) {
+              event.preventDefault();
+
+              const className = document.getElementById('className').value;
+              const classCode = document.getElementById('classCode').value;
+              const classTime = document.getElementById('classTime').value;
+
+              // ตรวจสอบว่ากรอกข้อมูลครบหรือไม่
+              if (!className || !classCode) {
+                  alert('กรุณากรอกชื่อวิชาและรหัสวิชาให้ครบถ้วน');
+                  return;
+              }
+
+              const classrooms = JSON.parse(localStorage.getItem('myClassrooms')) || [];
+              
+              const newClassroom = {
+                  id: Date.now(),
+                  name: className,
+                  code: classCode,
+                  time: classTime || 'N/A',
+                  students: Math.floor(Math.random() * 40) + 10
+              };
+
+              classrooms.push(newClassroom);
+              localStorage.setItem('myClassrooms', JSON.stringify(classrooms));
+
+              closeModal();
+              classroomForm.reset();
+              renderClassrooms();
+          });
+      }
+      renderClassrooms();
+  });
+</script>
+
+ </body>
+</html>
+        
+  

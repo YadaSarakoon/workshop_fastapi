@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ห้องเรียนของฉัน - ระบบติดตามความสนใจ</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#2563eb", secondary: "#60a5fa" },
+            borderRadius: { DEFAULT: "8px", button: "8px" },
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
+    <style> body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; } </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+       <nav class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex items-center">
+              <a href="login.html" class="text-primary text-2xl font-['Pacifico'] no-underline">logo</a>
+              <div class="hidden md:ml-10 md:flex md:space-x-8">
+                <a href="login.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">หน้าหลัก</a>
+                <a href="my-classrooms.html" class="text-primary border-b-2 border-primary px-1 pt-1 font-medium">ห้องเรียนของฉัน</a>
+                <a href="#" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">บันทึกการสอน</a>
+                <a href="#" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">รายงาน</a>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <a href="#" class="flex-shrink-0 relative flex items-center gap-2 text-sm focus:outline-none no-underline text-gray-800">
+                <span class="hidden md:block">อาจารย์ สมชาย วิทยาดี</span>
+                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"><i class="ri-user-line text-gray-600"></i></div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <h1 class="text-2xl font-bold text-gray-800">ห้องเรียนทั้งหมด</h1>
+                <div class="flex items-center gap-4">
+                    <div class="relative w-full md:w-auto">
+                        <input type="text" placeholder="ค้นหาห้องเรียน..." class="w-full md:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary"/>
+                        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <button id="openModalBtn" class="bg-primary text-white px-4 py-2 rounded-button font-medium hover:bg-primary/90 transition flex items-center gap-2 whitespace-nowrap">
+                        <i class="ri-add-line"></i>
+                        <span>สร้างห้องเรียนใหม่</span>
+                    </button>
+                </div>
+            </div>
+            <div id="classrooms-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                </div>
+        </div>
+      </main>
+      <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-gray-500 text-sm">
+          <p>© 2025 ระบบติดตามความสนใจของนักเรียน. สงวนลิขสิทธิ์ทั้งหมด.</p>
+        </div>
+      </footer>
+    </div>
+
+    <div id="createClassModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg max-w-md w-full p-6 shadow-xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-800">สร้างห้องเรียนใหม่</h3>
+          <button id="closeModal" class="text-gray-500 hover:text-gray-700"><i class="ri-close-line text-2xl"></i></button>
+        </div>
+        <form>
+          <div class="mb-4">
+            <label for="className" class="block text-sm font-medium text-gray-700 mb-1">ชื่อวิชา</label>
+            <input type="text" id="className" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" placeholder="เช่น การเขียนโปรแกรมเชิงวัตถุ" required>
+          </div>
+          <div class="mb-4">
+            <label for="classCode" class="block text-sm font-medium text-gray-700 mb-1">รหัสวิชา</label>
+            <input type="text" id="classCode" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" placeholder="เช่น CS401" required>
+          </div>
+          <div class="mb-4">
+            <label for="classTime" class="block text-sm font-medium text-gray-700 mb-1">เวลาเรียน</label>
+            <input type="time" id="classTime" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+          </div>
+          <div class="flex justify-end mt-6">
+            <button type="button" id="cancelCreate" class="mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-button hover:bg-gray-50 focus:outline-none whitespace-nowrap">ยกเลิก</button>
+            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-button hover:bg-primary/90 focus:outline-none whitespace-nowrap">สร้างห้องเรียน</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // --- ส่วนควบคุม Modal ---
+        const openModalBtn = document.getElementById('openModalBtn');
+        const createClassModal = document.getElementById("createClassModal");
+        // ถ้าหาปุ่มหรือ Modal ไม่เจอในหน้านี้ ให้หยุดทำงานไปเลย
+        if (!openModalBtn || !createClassModal) return;
+
+        const closeModalBtn = document.getElementById("closeModal");
+        const cancelCreateBtn = document.getElementById("cancelCreate");
+        const classroomForm = createClassModal.querySelector('form');
+
+        function openModal() { createClassModal.classList.remove("hidden"); }
+        function closeModal() { createClassModal.classList.add("hidden"); }
+
+        openModalBtn.addEventListener("click", openModal);
+        closeModalBtn.addEventListener("click", closeModal);
+        cancelCreateBtn.addEventListener("click", closeModal);
+
+        createClassModal.addEventListener("click", function (e) {
+            if (e.target === createClassModal) { closeModal(); }
+        });
+
+        // --- ส่วนจัดการข้อมูลห้องเรียน ---
+        function renderClassrooms() {
+            const classroomsListContainer = document.getElementById('classrooms-list');
+            if (!classroomsListContainer) return;
+
+            const classrooms = JSON.parse(localStorage.getItem('myClassrooms')) || [];
+            classroomsListContainer.innerHTML = '';
+            
+            if (classrooms.length === 0) {
+                classroomsListContainer.innerHTML = '<p class="text-gray-500 col-span-full">ยังไม่มีห้องเรียนที่สร้างไว้ ลองกด "สร้างห้องเรียนใหม่"</p>';
+                return;
+            }
+
+            classrooms.forEach(classroom => {
+                const cardHTML = `
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                    <div class="p-6 flex flex-col h-full">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">${classroom.name}</h3>
+                                <p class="text-gray-500 text-sm">รหัสวิชา: ${classroom.code}</p>
+                            </div>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">ใหม่</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm text-gray-600 mb-4">
+                            <div class="flex items-center gap-2"><i class="ri-user-line text-gray-500"></i><span>${classroom.students} คน</span></div>
+                            <div class="flex items-center gap-2"><i class="ri-time-line text-gray-500"></i><span>เริ่ม ${classroom.time}</span></div>
+                        </div>
+                        <div class="flex justify-between mt-auto">
+                            <a href="#" class="bg-primary text-white px-4 py-2 rounded-button font-medium hover:bg-primary/90 no-underline">เข้าห้องเรียน</a>
+                            <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-button border border-gray-200 no-underline"><i class="ri-more-2-fill"></i></a>
+                        </div>
+                    </div>
+                </div>`;
+                classroomsListContainer.innerHTML += cardHTML;
+            });
+        }
+
+        if (classroomForm) {
+            classroomForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const className = document.getElementById('className').value;
+                const classCode = document.getElementById('classCode').value;
+                if (!className || !classCode) {
+                    alert('กรุณากรอกชื่อวิชาและรหัสวิชา');
+                    return;
+                }
+                const classTime = document.getElementById('classTime').value;
+                const classrooms = JSON.parse(localStorage.getItem('myClassrooms')) || [];
+                const newClassroom = {
+                    id: Date.now(),
+                    name: className,
+                    code: classCode,
+                    time: classTime || 'N/A',
+                    students: Math.floor(Math.random() * 40) + 10
+                };
+                classrooms.push(newClassroom);
+                localStorage.setItem('myClassrooms', JSON.stringify(classrooms));
+                closeModal();
+                classroomForm.reset();
+                renderClassrooms();
+            });
+        }
+        renderClassrooms();
+    });
+    </script>
+</body>
+</html>

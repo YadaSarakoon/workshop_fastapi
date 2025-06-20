@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>เตรียมห้องเรียน - ระบบติดตามความสนใจ</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#2563eb", secondary: "#60a5fa" },
+            borderRadius: { DEFAULT: "8px", button: "8px" },
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
+    <style> body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; } </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+       <nav class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex items-center">
+              <a href="index.html" class="text-primary text-2xl font-['Pacifico'] no-underline">logo</a>
+              <div class="hidden md:ml-10 md:flex md:space-x-8">
+                <a href="index.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">หน้าหลัก</a>
+                <a href="my-classrooms.html" class="text-primary border-b-2 border-primary px-1 pt-1 font-medium">ห้องเรียนของฉัน</a>
+                <a href="recordings.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">บันทึกการสอน</a>
+                <a href="reports.html" class="text-gray-500 hover:text-gray-700 px-1 pt-1 font-medium">รายงาน</a>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <a href="profile.html" class="flex-shrink-0 relative flex items-center gap-2 text-sm focus:outline-none no-underline text-gray-800">
+                <span class="hidden md:block">อาจารย์ สมชาย วิทยาดี</span>
+                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"><i class="ri-user-line text-gray-600"></i></div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">เตรียมห้องเรียน: การวิเคราะห์และออกแบบระบบ</h1>
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <p class="text-gray-600">หน้านี้เป็นหน้าสำหรับเตรียมความพร้อมก่อนเริ่มการสอน เช่น อัปโหลดเอกสาร, ตั้งค่าบทเรียน, หรือตรวจสอบรายชื่อนักเรียน</p>
+            </div>
+        </div>
+      </main>
+      <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-gray-500 text-sm">
+          <p>© 2025 ระบบติดตามความสนใจของนักเรียน. สงวนลิขสิทธิ์ทั้งหมด.</p>
+        </div>
+      </footer>
+    </div>
+</body>
+</html>
